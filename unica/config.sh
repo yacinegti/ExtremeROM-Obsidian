@@ -18,7 +18,7 @@
 # UN1CA configuration file
 ROM_VERSION="0.0.8-nxt"
 ROM_VERSION+="-$(git rev-parse --short HEAD)"
-ROM_CODENAME="Kebab"
+ROM_CODENAME="obsidian"
 
 # Source ROM firmware
 case "$TARGET_SINGLE_SYSTEM_IMAGE" in
