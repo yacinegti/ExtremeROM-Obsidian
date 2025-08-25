@@ -8,10 +8,10 @@ REPLACE_KERNEL_BINARIES()
     mkdir -p "$TMP_DIR"
 
     ZIP_LINK="$EXTREMEKRNL_REPO/KebabKernel-${TARGET_CODENAME}.zip"
-    echo "Downloading $(basename "$ZIP_LINK")"
+    LOG "-Downloading $(basename "$ZIP_LINK")"
     curl -L -s -o "$TMP_DIR/krnl.zip" "$ZIP_LINK"
 
-    echo "Extracting kernel binaries"
+    LOG "-Extracting kernel binaries"
     rm -f "$WORK_DIR/kernel/"boot.img
     unzip -q -j "$TMP_DIR/krnl.zip" \
         "files/boot.img" \
@@ -27,7 +27,7 @@ ADD_MANAGER_APK_TO_PRELOAD()
     # https://github.com/tiann/KernelSU/issues/886
     local APK_PATH="system/preload/KernelSU-Next/com.rifsxd.ksunext-mesa==/base.apk"
 
-    echo "Adding KernelSU-Next.apk to preload apps"
+    LOG "-Adding KernelSU-Next.apk to preload apps"
     mkdir -p "$WORK_DIR/system/$(dirname "$APK_PATH")"
     curl -L -s -o "$WORK_DIR/system/$APK_PATH" -z "$WORK_DIR/system/$APK_PATH" "$KERNELSU_MANAGER_APK"
 
