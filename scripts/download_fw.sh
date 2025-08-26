@@ -168,8 +168,6 @@ for i in "${FIRMWARES[@]}"; do
 
     # Loop infinetely until download succeeds
     while true; do
-        # shellcheck disable=SC2164
-        # Anan's samloader stores its logs in the current working directory, let's move into OUT_DIR just for this time
         (
         cd "$OUT_DIR"
         samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download -O "$ODIN_DIR/${MODEL}_${CSC}" 1> /dev/null || exit 1
@@ -190,6 +188,15 @@ for i in "${FIRMWARES[@]}"; do
     VERIFY_ODIN_PACKAGES
 
     echo -n "$LATEST_FIRMWARE" > "$ODIN_DIR/${MODEL}_${CSC}/.downloaded"
+
+    # FIX: safe copy that works on GitHub runners (no xattr errors)
+    LOG "- Copying extracted firmware..."
+    sudo mkdir -p "$FW_DIR/${MODEL}_${CSC}/system"
+    sudo cp -r --no-preserve=ownership,mode,timestamps \
+        "$ODIN_DIR/${MODEL}_${CSC}/." \
+        "$FW_DIR/${MODEL}_${CSC}/system/" || exit 1
+
+    echo -n "$LATEST_FIRMWARE" > "$FW_DIR/${MODEL}_${CSC}/.extracted"
 
     LOG_STEP_OUT; LOG_STEP_OUT
 done
